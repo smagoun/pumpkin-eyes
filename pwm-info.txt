@@ -1,0 +1,35 @@
+# PWM available on the following, though not all at once!
+
+# From https://learn.adafruit.com/introducing-itsy-bitsy-m0/circuitpython-pwm:
+
+No PWM on: A0
+No PWM on: A1
+PWM on: A2
+PWM on: A3
+PWM on: A4
+No PWM on: A5
+PWM on: APA102_MOSI
+PWM on: APA102_SCK
+PWM on: D0
+PWM on: D1
+PWM on: D10
+PWM on: D11
+PWM on: D12
+PWM on: D13
+PWM on: D2
+PWM on: D3
+PWM on: D4
+PWM on: D5
+PWM on: D6
+PWM on: D7
+PWM on: D8
+PWM on: D9
+PWM on: L
+PWM on: MISO
+PWM on: MOSI
+PWM on: RX
+PWM on: SCK
+PWM on: SCL
+PWM on: SDA
+PWM on: TX
+
