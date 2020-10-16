@@ -6,7 +6,7 @@ import board
 import time
 import gc
 import random
-from digitalio import DigitalInOut, Direction
+from digitalio import DigitalInOut, Direction, Pull
 import pulseio
 import adafruit_dotstar
 from adafruit_motor import servo
@@ -14,6 +14,7 @@ from adafruit_motor import servo
 FREQ=50
 ANGLE_MIN=0
 ANGLE_MAX=180
+ANGLE_MIDPOINT=90
 
 # One pixel connected internally!
 dot = adafruit_dotstar.DotStar(board.APA102_SCK, board.APA102_MOSI, 1, brightness=0.5)
@@ -21,6 +22,15 @@ dot = adafruit_dotstar.DotStar(board.APA102_SCK, board.APA102_MOSI, 1, brightnes
 # Built in red LED. Conflicts with servo on D13 below
 # led = DigitalInOut(board.D13)
 # led.direction = Direction.OUTPUT
+
+# Global state
+running = True
+staring = False
+
+# Button to toggle between run and standby (servos back to midpoint)
+button = DigitalInOut(board.D0)
+button.direction = Direction.INPUT
+button.pull = Pull.UP
 
 # Pin numbers and ordering figured out by a bit of trial and error
 servo1 = servo.Servo(pulseio.PWMOut(board.D10, frequency=FREQ))
@@ -53,10 +63,17 @@ def flicker(dot):
     dot[0] = randomOrange()
     dot.brightness = random.random()
 
+def checkButton():
+    '''Toggle the 'running' global on button press'''
+    if (not button.value):  # Button pressed
+        global running
+        running = not running
+    while (not button.value):    # Wait for button to be released
+        time.sleep(0.1)
 
-######################### MAIN LOOP ##############################
 
-while True:
+def lookAround():
+    '''Main routine to look all around'''
     # Group 1
     servo1.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
     servo2.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
@@ -65,12 +82,15 @@ while True:
 
     flicker(dot)
     time.sleep(0.2)
+    checkButton()
 
     flicker(dot)
     time.sleep(0.1)
+    checkButton()
 
     flicker(dot)
     time.sleep(0.2)
+    checkButton()
 
     # Group 2
     servo5.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
@@ -80,9 +100,11 @@ while True:
 
     flicker(dot)
     time.sleep(0.2)
+    checkButton()
 
     flicker(dot)
     time.sleep(0.1)
+    checkButton()
 
     # Group 3
     servo9.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
@@ -93,9 +115,42 @@ while True:
 
     flicker(dot)
     time.sleep(0.2)
+    checkButton()
 
     flicker(dot)
     time.sleep(0.1)
+    checkButton()
 
     flicker(dot)
     time.sleep(0.2)
+    checkButton()
+
+def stare():
+    '''Reset servos to midpoint'''
+    global staring
+    if (not staring):
+        servo1.angle = ANGLE_MIDPOINT
+        servo2.angle = ANGLE_MIDPOINT
+        servo3.angle = ANGLE_MIDPOINT
+        servo4.angle = ANGLE_MIDPOINT
+        servo5.angle = ANGLE_MIDPOINT
+        servo6.angle = ANGLE_MIDPOINT
+        servo7.angle = ANGLE_MIDPOINT
+        servo8.angle = ANGLE_MIDPOINT
+        servo9.angle = ANGLE_MIDPOINT
+        servo10.angle = ANGLE_MIDPOINT
+        servo11.angle = ANGLE_MIDPOINT
+        # servo12 needs to be piggbacked on some other servo's pin - see above
+        # servo12.angle = ANGLE_MIDPOINT
+        staring = True
+
+
+######################### MAIN LOOP ##############################
+
+while True:
+    checkButton()   # No interrupts in CircuitPython, so we have to poll
+    if running:
+        staring = False
+        lookAround()
+    else:
+        stare()
