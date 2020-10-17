@@ -110,7 +110,7 @@ def lookAround():
     servo9.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
     servo10.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
     servo11.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
-    # servo12 needs to be piggbacked on some other servo's pin - see above
+    # servo12 needs to be piggybacked on some other servo's pin - see above
     # servo12.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
 
     flicker(dot)
@@ -140,7 +140,7 @@ def stare():
         servo9.angle = ANGLE_MIDPOINT
         servo10.angle = ANGLE_MIDPOINT
         servo11.angle = ANGLE_MIDPOINT
-        # servo12 needs to be piggbacked on some other servo's pin - see above
+        # servo12 needs to be piggybacked on some other servo's pin - see above
         # servo12.angle = ANGLE_MIDPOINT
         staring = True
 
