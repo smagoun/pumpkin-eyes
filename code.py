@@ -60,9 +60,9 @@ servo11 = servo.Servo(pulseio.PWMOut(board.SCL, frequency=FREQ))
 
 def randomOrange():
     '''Generate a random orange-ish color, like a flame'''
-    r = random.randint(50, 200)
-    g = random.randint(0, 80)   # If changing this, beware of overflow on the next line
-    r = r if r > g else g + 20
+    r = random.randint(200, 255)
+    g = random.randint(0, 60)
+    r = r if r > g else g
     b = 0
     return [r, g, b]
 
