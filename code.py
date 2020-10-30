@@ -10,6 +10,7 @@ from digitalio import DigitalInOut, Direction, Pull
 import pulseio
 import adafruit_dotstar
 from adafruit_motor import servo
+import neopixel
 
 FREQ=50
 ANGLE_MIN=0
@@ -18,6 +19,11 @@ ANGLE_MIDPOINT=90
 
 # One pixel connected internally!
 dot = adafruit_dotstar.DotStar(board.APA102_SCK, board.APA102_MOSI, 1, brightness=0.5)
+
+# Neopixel ring
+pixel_pin = board.D5
+num_pixels = 12
+pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.3, auto_write=False)
 
 # Built in red LED. Conflicts with servo on D13 below
 # led = DigitalInOut(board.D13)
@@ -37,7 +43,9 @@ servo1 = servo.Servo(pulseio.PWMOut(board.D10, frequency=FREQ))
 servo2 = servo.Servo(pulseio.PWMOut(board.D1, frequency=FREQ))
 servo3 = servo.Servo(pulseio.PWMOut(board.D2, frequency=FREQ))
 servo4 = servo.Servo(pulseio.PWMOut(board.D3, frequency=FREQ))
-servo5 = servo.Servo(pulseio.PWMOut(board.D5, frequency=FREQ))
+# NeoPixels need a 5V logic line, so piggyback servo 5 onto some other servo's pin
+# so we can free up D5
+# servo5 = servo.Servo(pulseio.PWMOut(board.D5, frequency=FREQ))
 servo6 = servo.Servo(pulseio.PWMOut(board.D7, frequency=FREQ))
 servo7 = servo.Servo(pulseio.PWMOut(board.D9, frequency=FREQ))
 servo8 = servo.Servo(pulseio.PWMOut(board.D11, frequency=FREQ))
@@ -58,10 +66,17 @@ def randomOrange():
     b = 0
     return [r, g, b]
 
-def flicker(dot):
-    '''Change color + brightness. Assumes a single DotStar'''
-    dot[0] = randomOrange()
-    dot.brightness = random.random()
+def flicker(dot, pixels):
+    '''Change color + brightness. Assumes a single DotStar and a set of NeoPixels'''
+    brightness = random.random() / 2    # NeoPixels get really bright and draw a lot of power
+    orange = randomOrange()
+
+    dot[0] = orange
+    dot.brightness = brightness
+
+    pixels.fill(orange)
+    pixels.brightness = brightness
+    pixels.show()
 
 def checkButton():
     '''Toggle the 'running' global on button press'''
@@ -80,29 +95,30 @@ def lookAround():
     servo3.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
     servo4.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
 
-    flicker(dot)
+    flicker(dot, pixels)
     time.sleep(0.2)
     checkButton()
 
-    flicker(dot)
+    flicker(dot, pixels)
     time.sleep(0.1)
     checkButton()
 
-    flicker(dot)
+    flicker(dot, pixels)
     time.sleep(0.2)
     checkButton()
 
     # Group 2
-    servo5.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
+    # servo5 needs to be piggybacked on some other servo's pin - see above
+    # servo5.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
     servo6.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
     servo7.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
     servo8.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
 
-    flicker(dot)
+    flicker(dot, pixels)
     time.sleep(0.2)
     checkButton()
 
-    flicker(dot)
+    flicker(dot, pixels)
     time.sleep(0.1)
     checkButton()
 
@@ -113,15 +129,15 @@ def lookAround():
     # servo12 needs to be piggybacked on some other servo's pin - see above
     # servo12.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
 
-    flicker(dot)
+    flicker(dot, pixels)
     time.sleep(0.2)
     checkButton()
 
-    flicker(dot)
+    flicker(dot, pixels)
     time.sleep(0.1)
     checkButton()
 
-    flicker(dot)
+    flicker(dot, pixels)
     time.sleep(0.2)
     checkButton()
 
@@ -133,7 +149,8 @@ def stare():
         servo2.angle = ANGLE_MIDPOINT
         servo3.angle = ANGLE_MIDPOINT
         servo4.angle = ANGLE_MIDPOINT
-        servo5.angle = ANGLE_MIDPOINT
+        # servo5 needs to be piggybacked on some other servo's pin - see above
+        # servo5.angle = ANGLE_MIDPOINT
         servo6.angle = ANGLE_MIDPOINT
         servo7.angle = ANGLE_MIDPOINT
         servo8.angle = ANGLE_MIDPOINT
