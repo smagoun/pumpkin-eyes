@@ -68,7 +68,7 @@ def randomOrange():
 
 def flicker(dot, pixels):
     '''Change color + brightness. Assumes a single DotStar and a set of NeoPixels'''
-    brightness = random.random() / 2    # NeoPixels get really bright and draw a lot of power
+    brightness = random.random()
     orange = randomOrange()
 
     dot[0] = orange
