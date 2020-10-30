@@ -95,17 +95,11 @@ def lookAround():
     servo3.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
     servo4.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
 
-    flicker(dot, pixels)
-    time.sleep(0.2)
-    checkButton()
+    for i in range(random.randint(0, 4)):
+        flicker(dot, pixels)
+        time.sleep(0.1)
+        checkButton()
 
-    flicker(dot, pixels)
-    time.sleep(0.1)
-    checkButton()
-
-    flicker(dot, pixels)
-    time.sleep(0.2)
-    checkButton()
 
     # Group 2
     # servo5 needs to be piggybacked on some other servo's pin - see above
@@ -114,13 +108,10 @@ def lookAround():
     servo7.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
     servo8.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
 
-    flicker(dot, pixels)
-    time.sleep(0.2)
-    checkButton()
-
-    flicker(dot, pixels)
-    time.sleep(0.1)
-    checkButton()
+    for i in range(random.randint(0, 4)):
+        flicker(dot, pixels)
+        time.sleep(0.1)
+        checkButton()
 
     # Group 3
     servo9.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
@@ -129,17 +120,11 @@ def lookAround():
     # servo12 needs to be piggybacked on some other servo's pin - see above
     # servo12.angle = random.randint(ANGLE_MIN, ANGLE_MAX)
 
-    flicker(dot, pixels)
-    time.sleep(0.2)
-    checkButton()
+    for i in range(random.randint(0, 4)):
+        flicker(dot, pixels)
+        time.sleep(0.1)
+        checkButton()
 
-    flicker(dot, pixels)
-    time.sleep(0.1)
-    checkButton()
-
-    flicker(dot, pixels)
-    time.sleep(0.2)
-    checkButton()
 
 def stare():
     '''Reset servos to midpoint'''
